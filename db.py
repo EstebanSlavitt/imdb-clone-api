@@ -17,10 +17,12 @@ def initial_setup():
     conn.execute(
         """
         CREATE TABLE movies (
-          id INTEGER PRIMARY KEY NOT NULL,
-          name TEXT,
-          width INTEGER,
-          height INTEGER
+          id INTEGER PRIMARY KEY,
+          title TEXT,
+          year INTEGER,
+          genre TEXT,
+          description TEXT,
+          image TEXT
         );
         """
     )
@@ -28,14 +30,25 @@ def initial_setup():
     print("Table created successfully")
 
     movies_seed_data = [
-        ("1st movie", 800, 400),
-        ("2nd movie", 1024, 768),
-        ("3rd movie", 200, 150),
+        (
+          "Alien: Romulus",
+          2024,
+          "horror",
+          "A group of young adults attempt to escape their awful world.",
+          "https://static1.moviewebimages.com/wordpress/wp-content/uploads/2024/06/alien-romulus-poster.jpg",
+        ),
+        (
+          "Prey",
+          2022,
+          "horror",
+          "A native american fights for her life agains the most advanced killing machine.",
+          "https://i0.wp.com/screen-connections.com/wp-content/uploads/2023/08/Prey-4K.UHD_.Coverart.jpg",
+        ),
     ]
     conn.executemany(
         """
-        INSERT INTO movies (name, width, height)
-        VALUES (?,?,?)
+        INSERT INTO movies (title, year, genre, description, image)
+        VALUES (?,?,?, ?,?)
         """,
         movies_seed_data,
     )
@@ -44,6 +57,27 @@ def initial_setup():
 
     conn.close()
 
+def movies_all():
+  conn = connect_to_db()
+  rows = conn.execute(
+      """
+      SELECT * FROM movies
+      """
+  ).fetchall()
+  return [dict(row) for row in rows]
 
+def movies_create(title, year, genre, description, image):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        INSERT INTO movies (title, year, genre, description, image)
+        VALUES (?, ?, ?, ?, ?)
+        RETURNING *
+        """,
+        (id, title, year, genre, description, image),
+    ).fetchone()
+    conn.commit()
+    return dict(row)
+  
 if __name__ == "__main__":
     initial_setup()
