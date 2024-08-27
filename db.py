@@ -74,7 +74,7 @@ def movies_create(title, year, genre, description, image):
         VALUES (?, ?, ?, ?, ?)
         RETURNING *
         """,
-        (id, title, year, genre, description, image),
+        (title, year, genre, description, image),
     ).fetchone()
     conn.commit()
     return dict(row)
