@@ -175,15 +175,15 @@ def movies_find_by_id(id):
     return dict(row)
 
 
-def movies_update_by_id(id, name, width, height):
+def movies_update_by_id(id, title, year, genre, description, image):
     conn = connect_to_db()
     row = conn.execute(
         """
-        UPDATE movies SET name = ?, width = ?, height = ?
+        UPDATE movies SET
         WHERE id = ?
         RETURNING *
         """,
-        (name, width, height, id),
+        (title, year, genre, description, image, id),
     ).fetchone()
     conn.commit()
     return dict(row)
