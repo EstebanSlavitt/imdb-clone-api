@@ -173,6 +173,21 @@ def movies_find_by_id(id):
         (id,),
     ).fetchone()
     return dict(row)
+
+
+def movies_update_by_id(id, name, width, height):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        UPDATE movies SET name = ?, width = ?, height = ?
+        WHERE id = ?
+        RETURNING *
+        """,
+        (name, width, height, id),
+    ).fetchone()
+    conn.commit()
+    return dict(row)
+
   
 if __name__ == "__main__":
     initial_setup()

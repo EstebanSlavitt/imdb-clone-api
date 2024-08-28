@@ -29,3 +29,14 @@ def create():
 @app.route("/movies/<id>.json")
 def show(id):
     return db.movies_find_by_id(id)
+
+
+@app.route("/movies.json", methods=["PATCH"])
+def update(id):
+    title = request.form.get("title")
+    year = request.form.get("year")
+    genre = request.form.get("genre")
+    description = request.form.get("description")
+    image = request.form.get("image")
+    return db.movies_update_by_id(id,title, year, genre, description, image)
+
