@@ -162,6 +162,17 @@ def movies_create(title, year, genre, description, image):
     ).fetchone()
     conn.commit()
     return dict(row)
+
+def movies_find_by_id(id):
+    conn = connect_to_db()
+    row = conn.execute(
+        """
+        SELECT * FROM movies
+        WHERE id = ?
+        """,
+        (id,),
+    ).fetchone()
+    return dict(row)
   
 if __name__ == "__main__":
     initial_setup()
