@@ -153,6 +153,7 @@ def movies_all():
 
 
 def movies_create(title, year, genre, description, image):
+    # print("Creating new movie record: ", title, year, genre, description, image)
     conn = connect_to_db()
     row = conn.execute(
         """

@@ -18,11 +18,13 @@ def index():
 
 @app.route("/movies.json", methods=["POST"])
 def create():
-    title = request.form.get("title")
-    year = request.form.get("year")
-    genre = request.form.get("genre")
-    description = request.form.get("description")
-    image = request.form.get("image")
+    # print(f"Processing Create request: #{request}")
+    data = request.get_json()
+    title = data.get("title")
+    year = data.get("year")
+    genre = data.get("genre")
+    description = data.get("description")
+    image = data.get("image")
     return db.movies_create(title, year, genre, description, image)
 
 
